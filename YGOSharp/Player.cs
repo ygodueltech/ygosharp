@@ -143,8 +143,9 @@ namespace YGOSharp
                 return;
 
             int version = packet.ReadInt16();
-            if (version != Program.ClientVersion)
-                return;
+            Console.WriteLine($"now version check {version} {Program.ClientVersion}");
+            //if (version != Program.ClientVersion)
+            //    return;
 
             packet.ReadInt32();//gameid
             packet.ReadInt16();
