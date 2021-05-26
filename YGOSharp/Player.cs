@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using YGOSharp.Network;
 using YGOSharp.Network.Enums;
 using YGOSharp.Network.Utils;
@@ -54,6 +55,7 @@ namespace YGOSharp
         public void Parse(BinaryReader packet)
         {
             CtosMessage msg = (CtosMessage)packet.ReadByte();
+            Console.WriteLine(msg);
             switch (msg)
             {
                 case CtosMessage.PlayerInfo:
@@ -61,6 +63,11 @@ namespace YGOSharp
                     break;
                 case CtosMessage.JoinGame:
                     OnJoinGame(packet);
+                    Console.WriteLine($"{Game.Players}");
+                    //if (Game.Players.Length > 1){
+                    //    Console.WriteLine("my start");
+                    //    Game.StartDuel(this);
+                    //}
                     break;
                 case CtosMessage.CreateGame:
                     OnCreateGame(packet);
@@ -131,6 +138,7 @@ namespace YGOSharp
 
         private void OnJoinGame(BinaryReader packet)
         {
+            Console.WriteLine("on join");
             if (Name == null || Type != (int)PlayerType.Undefined)
                 return;
 
@@ -141,6 +149,7 @@ namespace YGOSharp
             packet.ReadInt32();//gameid
             packet.ReadInt16();
 
+            Console.WriteLine("add player");
             Game.AddPlayer(this);
             IsAuthentified = true;
         }

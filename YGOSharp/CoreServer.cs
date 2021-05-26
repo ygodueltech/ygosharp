@@ -37,6 +37,7 @@ namespace YGOSharp
                 _listener.Start();
                 IsRunning = true;
                 IsListening = true;
+                Console.WriteLine("game start");
                 Game.Start();
             }
             catch (Exception)
@@ -70,13 +71,14 @@ namespace YGOSharp
 
         public void AddClient(YGOClient client)
         {
+            Console.WriteLine("AddClient");
             _clients.Add(client);
             Player player = new Player(Game, client);
 
             client.PacketReceived += packet => player.Parse(packet);
             client.Disconnected += packet => player.OnDisconnected();
         }
-        
+
         public void Tick()
         {
             _listener.Update();

@@ -59,7 +59,7 @@ namespace YGOSharp
 
         private int[] _timelimit;
         private DateTime? _time;
-        
+
         private bool _matchKill;
 
         public event Action<object, EventArgs> OnNetworkReady;
@@ -157,7 +157,7 @@ namespace YGOSharp
                 OnNetworkEnd(this, EventArgs.Empty);
             }
         }
-        
+
         public void SendToAll(BinaryWriter packet)
         {
             SendToPlayers(packet);
@@ -456,7 +456,7 @@ namespace YGOSharp
                 bool ocg = Region == 0 || Region == 2;
                 bool tcg = Region == 1 || Region == 2;
                 int result = 1;
-                
+
                 if (player.Deck != null)
                 {
                     result = NoCheckDeck ? 0 : player.Deck.Check(Banlist, ocg, tcg);
@@ -500,14 +500,17 @@ namespace YGOSharp
 
         public void StartDuel(Player player)
         {
+            Console.WriteLine("start duel");
             if (State != GameState.Lobby)
                 return;
             if (!player.Equals(HostPlayer))
                 return;
             for (int i = 0; i < Players.Length; i++)
             {
-                if (!IsReady[i])
+                if (!IsReady[i]){
+                    Console.WriteLine("not ready");
                     return;
+                }
                 if (Players[i] == null)
                     return;
             }
@@ -577,7 +580,7 @@ namespace YGOSharp
                 return;
             if (player.Type != _startplayer)
                 return;
-            
+
             int opt = MasterRule << 16;
             if (EnablePriority)
                 opt += 0x08;
@@ -585,7 +588,7 @@ namespace YGOSharp
                 opt += 0x10;
             if (IsTag)
                 opt += 0x20;
-            
+
             if (result && player.Type == (IsTag ? 2 : 1) || !result && player.Type == 0)
             {
                 opt += 0x80;
@@ -1056,7 +1059,7 @@ namespace YGOSharp
                 _startplayer = 1 - _startplayer;
             MatchResults[DuelCount] = player;
             MatchReasons[DuelCount++] = reason;
-            
+
             if (OnDuelEnd != null)
             {
                 OnDuelEnd(this, EventArgs.Empty);
@@ -1174,7 +1177,7 @@ namespace YGOSharp
             packet.Write((short)0); // deck
             packet.Write((short)0);  // extra
             player.Send(packet);
-            
+
             BinaryWriter turn = GamePacketFactory.Create(GameMessage.NewTurn);
             turn.Write((byte)0);
             player.Send(turn);
@@ -1192,7 +1195,7 @@ namespace YGOSharp
 
             RefreshAllObserver(player);
         }
-        
+
         private void HandleError(string error)
         {
             BinaryWriter packet = GamePacketFactory.Create(StocMessage.Chat);
