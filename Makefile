@@ -10,7 +10,7 @@ build:
 
 
 run:
-	./YGOSharp/bin/Debug/YGOSharp.exe NoShuffleDeck=True
+	./YGOSharp/bin/Debug/YGOSharp.exe NoShuffleDeck=True ClientVersion=4946
 
 buildrun:build run
 
